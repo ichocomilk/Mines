@@ -1,5 +1,6 @@
 package com.steffy.mines.resources.commands;
 
+import com.steffy.mines.utilities.general.Chat;
 import com.steffy.mines.utilities.general.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -17,10 +18,14 @@ public class MinesCommand extends Command implements TabCompleter {
     }
 
     public boolean run(Player player, String[] args) {
-        for (Command command : commands) {
-            if (command.toString().equalsIgnoreCase(args[0])) {
-                if (player.hasPermission(toString() + "." + command.toString())) {
-                    return command.run(player, args);
+        if(args.length == 0) {
+            player.sendMessage(Chat.format(""));
+        } else {
+            for (Command command : commands) {
+                if (command.toString().equalsIgnoreCase(args[0])) {
+                    if (player.hasPermission(toString() + "." + command.toString())) {
+                        return command.run(player, args);
+                    }
                 }
             }
         }

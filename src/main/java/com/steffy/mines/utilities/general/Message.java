@@ -12,6 +12,7 @@ public enum  Message {
     MINE_CONTAINS_COMPOSITION_NULL("mine-contains-composition-null", "The &b{0} &7mine does not contain &b{1}&7."),
     MINE_CREATE("mine-create", "Successfully created mine: &b{0}"),
     MINE_DELETE("mine-delete", "Successfully deleted mine: &b{0}"),
+    MINE_HELP("mine-help", "Type &b/mines help 1 &7for commands."),
     MINE_LOCATION("mine-location", "You have set the spawn location for the &b{0} &7mine."),
     MINE_NOT_NULL("mine-not-null", "The &b{0} &7mine already exists."),
     MINE_NULL("mine-null", "The &b{0} &7mine does not seem to exist."),
