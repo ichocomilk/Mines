@@ -1,0 +1,8 @@
+name: Mines
+main: com.steffy.mines.Mines
+version: RELEASE 1.0
+author: StefTheDev
+
+commands:
+  mines:
+    description: "The mines command."
