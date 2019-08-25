@@ -5,7 +5,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 
 public enum  Message {
-    MINE_ADD("mine-add", "You have added a new composition &b{0} of percentage &a{1}% &7to the &b{2}&7."),
+    MINE_ADD("mine-add", "You have added a new composition &b{0} of {1}% &7to the &b{2}&7 mine."),
+    MINE_BROADCAST("mine-broadcast", "The &a{0} &7mine has been reset."),
     MINE_COMPOSITION_FULL("mine-composition-full", "You can't add more to the composition of the &b{0} &7mine as it is at 100%."),
     MINE_CONTAINS_COMPOSITION("mine-contains-composition", "The &b{0} &7mine already contains &b{1} &7as part of it's composition."),
     MINE_CONTAINS_COMPOSITION_NULL("mine-contains-composition-null", "The &b{0} &7mine does not contain &b{1}&7."),

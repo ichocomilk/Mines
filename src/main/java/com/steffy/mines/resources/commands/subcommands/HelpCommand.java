@@ -30,9 +30,9 @@ public class HelpCommand extends Command {
                 player.sendMessage(Chat.format(Message.PAGE_LIMIT.toString().replace("{0}", String.valueOf(page))));
             } else {
                 player.sendMessage(Message.PAGE_HELP.toString()
-                        .replace("{0}", String.valueOf(index)
-                                .replace("{1}", String.valueOf(page))
-                ));
+                        .replace("{0}", String.valueOf(index))
+                        .replace("{1}", String.valueOf(page))
+                );
                 player.sendMessage("");
 
                 List<String> stringList = new ArrayList<>();
@@ -56,9 +56,10 @@ public class HelpCommand extends Command {
 
                 player.sendMessage("");
                 if ((index + 1) > page) {
-                    player.sendMessage(Chat.format(Message.PAGE_PREVIOUS.toString().replace("{0}", String.valueOf(index - 1))));
+                    player.sendMessage(Chat.format(Message.PAGE_PREVIOUS.toString().replace("{0}", String.valueOf(index - 1))
+                    ));
                 } else {
-                    player.sendMessage(Chat.format(Message.PAGE_NEXT.toString().replace("{0}", String.valueOf(index - 1))));
+                    player.sendMessage(Chat.format(Message.PAGE_NEXT.toString().replace("{0}", String.valueOf(index + 1))));
                 }
             }
         } else {

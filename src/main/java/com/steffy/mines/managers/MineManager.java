@@ -3,7 +3,9 @@ package com.steffy.mines.managers;
 import com.steffy.mines.resources.mines.Mine;
 import com.steffy.mines.resources.mines.MineComposition;
 import com.steffy.mines.resources.mines.MinePosition;
+import com.steffy.mines.utilities.general.Chat;
 import com.steffy.mines.utilities.general.Manager;
+import com.steffy.mines.utilities.general.Message;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -48,7 +50,10 @@ public class MineManager extends Manager<Mine> {
             if(player != null) {
                 player.teleport(mine.getLocation().toLocation(plugin));
                 float completion = (System.nanoTime() - start) / 1000000.0f;
-                player.sendMessage("The " + mine.toString() + " mine has reset. Took &f" + completion + "ms&7.");
+                player.sendMessage(Chat.format(Message.MINE_BROADCAST.toString()
+                        .replace("{0}", mine.toString())
+                        .replace("{1}", String.valueOf(completion))
+                ));
             }
         });
     }

@@ -62,7 +62,7 @@ public class Mine {
 
     public MineComposition getComposition(String string) {
         for(MineComposition mineComposition : compositions) {
-            if(mineComposition.toString().equalsIgnoreCase(string)) {
+            if(mineComposition.getMaterial().equalsIgnoreCase(string)) {
                 return mineComposition;
             }
         }
