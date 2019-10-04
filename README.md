@@ -1,5 +1,4 @@
-# Mines
-Mines plugin for spigot
+![alt text](https://proxy.spigotmc.org/f456d8a23a6190c25e3cd44e84ace08ff3eeffc0?url=https%3A%2F%2Fi.imgur.com%2FXMl5m9y.png)
 
 ### Features
 
