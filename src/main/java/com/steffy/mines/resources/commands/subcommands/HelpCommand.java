@@ -4,7 +4,9 @@ import com.steffy.mines.resources.commands.MinesCommand;
 import com.steffy.mines.utilities.general.Chat;
 import com.steffy.mines.utilities.general.Command;
 import com.steffy.mines.utilities.general.Message;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +25,14 @@ public class HelpCommand extends Command {
     @Override
     public boolean run(Player player, String[] strings) {
         if(strings.length == 2) {
+            if(!StringUtils.isNumeric(strings[1])) {
+                player.sendMessage(Chat.format(Message.PAGE_NUMBER.toString()));
+                return true;
+            }
+
             int index = Integer.parseInt(strings[1]);
             int page = (int) Math.ceil((double) minesCommand.getCommands().size() / 6);
+            if(index == 0) index = 1;
 
             if (index > page) {
                 player.sendMessage(Chat.format(Message.PAGE_LIMIT.toString().replace("{0}", String.valueOf(page))));
@@ -49,7 +57,7 @@ public class HelpCommand extends Command {
                         String string = stringList.get(number);
                         player.sendMessage(Chat.color(Message.PAGE_FORMAT.toString()
                                 .replace("{0}", String.valueOf(number + 1))
-                                .replace("{1}", string)
+                                .replace("{1}", "/mines " + string)
                         ));
                     }
                 }

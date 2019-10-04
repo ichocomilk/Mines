@@ -65,7 +65,8 @@ public class MineManager extends Manager<Mine> {
             Location location = o.getLocation();
             if(location.getBlockX() == block.getX() &&
                     location.getBlockY() == block.getY() &&
-                    location.getBlockZ() == block.getZ()) {
+                    location.getBlockZ() == block.getZ() &&
+                    location.getWorld().getName().equals(block.getWorld().getName())) {
                 uuids.add(o.getUniqueId());
             }
         }));

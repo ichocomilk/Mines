@@ -1,7 +1,8 @@
 name: Mines
 main: com.steffy.mines.Mines
-version: RELEASE 1.0
+version: RELEASE 1.1
 author: StefTheDev
+api-version: 1.13
 
 commands:
   mines:

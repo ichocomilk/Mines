@@ -40,7 +40,7 @@ public class AddCommand extends Command {
                 if(mineManager.canComposite(mine, percentage)) {
                     MineComposition mineComposition = mine.getComposition(string);
                     if(mineComposition == null) {
-                        mine.add(new MineComposition(material, percentage));
+                        mine.add(new MineComposition(material.toUpperCase(), percentage));
                         player.sendMessage(Chat.format(Message.MINE_ADD.toString()
                                 .replace("{0}", material)
                                 .replace("{1}", String.valueOf(percentage))

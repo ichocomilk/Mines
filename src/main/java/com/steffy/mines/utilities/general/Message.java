@@ -25,6 +25,7 @@ public enum  Message {
     PAGE_HELP("page-help", "&e&lHelp: &7[{0}/{1}]"),
     PAGE_LIMIT("page-limit", "There are only &b{0} &7help pages."),
     PAGE_NEXT("page-next", "Type &b/mines help {0} &7for the next page."),
+    PAGE_NUMBER("page-number", "You must provide a number for different help pages."),
     PAGE_PREVIOUS("page-previous", "Type &b/mines help {0} &7for the previous page."),
     PREFIX("prefix", "&e&lMines: &7");
 
