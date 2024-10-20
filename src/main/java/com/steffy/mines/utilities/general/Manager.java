@@ -4,7 +4,8 @@ import com.steffy.mines.utilities.storage.JSON;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Manager<T> {
 
@@ -39,7 +40,7 @@ public abstract class Manager<T> {
         return null;
     }
     public List<T> getTs() {
-        return Collections.unmodifiableList(tList);
+        return tList;
     }
 }
 

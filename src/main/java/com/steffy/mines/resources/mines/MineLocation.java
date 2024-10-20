@@ -8,7 +8,7 @@ public class MineLocation {
 
     private final double x, y, z;
     private final float yaw, pitch;
-    private final String world;
+    public final String world;
 
     MineLocation(double x, double y, double z, float yaw, float pitch, String world) {
         this.x = x;

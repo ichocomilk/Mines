@@ -53,7 +53,6 @@ public class AddCommand extends Command {
                         ));
                     }
                 } else {
-                    float composition = mineManager.availableComposition(mine);
                     player.sendMessage(Chat.format(Message.MINE_COMPOSITION_FULL.toString().replace("{0}", mine.toString())));
                 }
             }

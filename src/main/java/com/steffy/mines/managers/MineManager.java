@@ -1,23 +1,31 @@
 package com.steffy.mines.managers;
 
+import com.steffy.mines.Mines;
 import com.steffy.mines.resources.mines.Mine;
 import com.steffy.mines.resources.mines.MineComposition;
 import com.steffy.mines.resources.mines.MinePosition;
 import com.steffy.mines.utilities.general.Chat;
 import com.steffy.mines.utilities.general.Manager;
 import com.steffy.mines.utilities.general.Message;
+
+import net.minecraft.world.level.block.state.IBlockData;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_21_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_21_R1.block.CraftBlockType;
+import org.bukkit.craftbukkit.v1_21_R1.block.data.CraftBlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MineManager extends Manager<Mine> {
+public class MineManager extends Manager<Mine> implements Runnable {
 
     private final Plugin plugin;
 
@@ -26,101 +34,60 @@ public class MineManager extends Manager<Mine> {
         this.plugin = plugin;
     }
 
-    public void reset(Mine mine, World world) {
-        LinkedList<Block> blocks = getBounds(mine, true, world);
-        float start = System.nanoTime();
+    public final void reset(final Mine mine, final World world) {   
+        final List<MineComposition> compositions = mine.getCompositions();
+        final String material = compositions.iterator().next().material;
+        final IBlockData materialData = ((CraftBlockType<?>)(Material.getMaterial(material)).asBlockType()).getHandle().o();
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 64; i++) {
-                    if (blocks.isEmpty()) {
-                        cancel();
-                        break;
-                    }
-                    Block block = blocks.getFirst();
-                    Material material = getRandom(mine);
-                    if (material != null) block.setType(material);
-                    blocks.remove(block);
-                }
-            }
-        }.runTaskTimer(plugin, 0L, 0L);
-        getPlayers(mine, world).forEach(uuid -> {
-            Player player = plugin.getServer().getPlayer(uuid);
-            if(player != null) {
-                player.teleport(mine.getLocation().toLocation(plugin));
-                float completion = (System.nanoTime() - start) / 1000000.0f;
-                player.sendMessage(Chat.format(Message.MINE_BROADCAST.toString()
-                        .replace("{0}", mine.toString())
-                        .replace("{1}", String.valueOf(completion))
-                ));
-            }
-        });
-    }
+        final MinePosition pos1 = mine.getPositionOne();
+        final MinePosition pos2 = mine.getPositionTwo();
+        final int minX = Math.min(pos1.x, pos2.x), minY = Math.min(pos1.y, pos2.y), minZ = Math.min(pos1.z, pos2.z);
 
-    private Set<UUID> getPlayers(Mine mine, World world) {
-        Set<UUID> uuids = new HashSet<>();
-
-        getBounds(mine, false, world).forEach(block -> plugin.getServer().getOnlinePlayers().forEach(o -> {
-            Location location = o.getLocation();
-            if(location.getBlockX() == block.getX() &&
-                    location.getBlockY() == block.getY() &&
-                    location.getBlockZ() == block.getZ() &&
-                    location.getWorld().getName().equals(block.getWorld().getName())) {
-                uuids.add(o.getUniqueId());
-            }
-        }));
-        return uuids;
-    }
-
-    private LinkedList<Block> getBounds(Mine mine, boolean air, World world) {
-        MinePosition pos1 = mine.getPositionOne();
-        MinePosition pos2 = mine.getPositionTwo();
-
-        LinkedList<Block> blocks = new LinkedList<>();
-
-        for (int x = 0; x <= Math.abs(pos1.getX() - pos2.getX()); x++) {
-            for (int y = 0; y <= Math.abs(pos1.getY() - pos2.getY()); y++) {
-                for (int z = 0; z <= Math.abs(pos1.getZ() - pos2.getZ()); z++) {
-                    Block block = world.getBlockAt(
-                            (Math.min(pos1.getX(), pos2.getX())) + x,
-                            (Math.min(pos1.getY(), pos2.getY())) + y,
-                            (Math.min(pos1.getZ(), pos2.getZ())) + z
+        final int xLimit = Math.abs(pos1.x - pos2.x);
+        final int yLimit = Math.abs(pos1.y - pos2.y);
+        final int zLimit = Math.abs(pos1.z - pos2.z);
+        for (int x = 0; x <= xLimit; x++) {
+            for (int y = 0; y <= yLimit; y++) {
+                for (int z = 0; z <= zLimit; z++) {
+                    final Block block = world.getBlockAt(
+                        minX + x,
+                        minY + y,
+                        minZ + z
                     );
-                    if(air) {
-                        if(block.getType() == Material.AIR) {
-                            blocks.add(block);
-                        }
-                    } else {
-                        blocks.add(block);
+                    final CraftBlock craftBlock = ((CraftBlock)block);
+                    final IBlockData old = craftBlock.getNMS();
+                    if (CraftBlockType.minecraftToBukkit(old.b()) == Material.AIR) {
+                        craftBlock.getHandle().a(craftBlock.getPosition(), materialData, 1042);
                     }
                 }
             }
         }
-        return blocks;
-    }
 
-    private Material getRandom(Mine mine) {
-        List<MineComposition> compositions = mine.getCompositions();
-        int totalPercentage = 0;
-        for(MineComposition mineComposition : compositions) {
-            totalPercentage = totalPercentage + mineComposition.getPercentage();
+
+        final int maxX = Math.max(pos1.x, pos2.x), maxY = Math.max(pos1.y, pos2.y), maxZ = Math.max(pos1.z, pos2.z);
+
+        final String message = Chat.format(Message.MINE_BROADCAST.toString().replace("{0}", mine.toString()));
+        final Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        final Location mineLocation = mine.getLocation().toLocation(plugin);
+        for (final Player player : players) {
+            final Location location = player.getLocation();
+            final int x = location.getBlockX();
+            final int y = location.getBlockX();
+            final int z = location.getBlockX();
+            if (
+                x >= minX && x <= maxX &&
+                y >= minY && y <= maxY &&
+                z >= minZ && z <= maxZ
+            ) {
+                player.teleport(mineLocation);
+                player.sendMessage(message);
+            }
         }
-
-        if(totalPercentage == 0) return null;
-
-        Random random = new Random();
-        int index =  random.nextInt(totalPercentage);
-        int sum = 0, i = 0;
-        while (sum < index) {
-            sum = sum + compositions.get(i++).getPercentage();
-        }
-        return Material.valueOf(compositions.get(Math.max(0, i - 1)).getMaterial());
     }
 
     public float availableComposition(Mine mine) {
         AtomicReference<Float> currentPercentage = new AtomicReference<>(0.0f);
-        mine.getCompositions().forEach(mineComposition -> currentPercentage.updateAndGet(v -> v + mineComposition.getPercentage()));
+        mine.getCompositions().forEach(mineComposition -> currentPercentage.updateAndGet(v -> v + mineComposition.percentage));
         return currentPercentage.get();
     }
 
@@ -136,5 +103,16 @@ public class MineManager extends Manager<Mine> {
             }
         }
         return null;
+    }
+
+    @Override
+    public void run() {
+        final List<Mine> mines = getTs();
+        for (final Mine mine : mines) {
+            if (mine.ticksSeconds++ >= mine.resetTime) {
+                reset(mine, plugin.getServer().getWorld(mine.getLocation().world));
+                mine.ticksSeconds = 0;
+            }
+        }
     }
 }

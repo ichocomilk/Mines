@@ -6,7 +6,6 @@ import com.steffy.mines.utilities.general.Command;
 import com.steffy.mines.utilities.general.Message;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

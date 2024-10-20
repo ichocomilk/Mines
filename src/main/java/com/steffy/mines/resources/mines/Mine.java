@@ -13,6 +13,9 @@ public class Mine {
     private final String string;
     private final List<MineComposition> compositions;
 
+    public transient int ticksSeconds;
+    public int resetTime = 0;
+
     private MinePosition positionOne, positionTwo;
     private MineLocation mineLocation;
 
@@ -29,12 +32,12 @@ public class Mine {
         this.compositions.remove(mineComposition);
     }
 
-    public void setPositionOne(MinePosition positionOne) {
-        this.positionOne = positionOne;
+    public void setPositionOne(MinePosition newPositionOne) {
+        this.positionOne = newPositionOne;
     }
 
-    public void setPositionTwo(MinePosition positionTwo) {
-        this.positionTwo = positionTwo;
+    public void setPositionTwo(MinePosition newPositionTwo) {
+        this.positionTwo = newPositionTwo;
     }
 
     public void setLocation(Location location) {
@@ -47,11 +50,9 @@ public class Mine {
                 Objects.requireNonNull(location.getWorld()).getName()
         );
     }
-
     public MinePosition getPositionOne() {
         return positionOne;
     }
-
     public MinePosition getPositionTwo() {
         return positionTwo;
     }
@@ -62,7 +63,7 @@ public class Mine {
 
     public MineComposition getComposition(String string) {
         for(MineComposition mineComposition : compositions) {
-            if(mineComposition.getMaterial().equalsIgnoreCase(string)) {
+            if(mineComposition.material.equals(string.toUpperCase())) {
                 return mineComposition;
             }
         }

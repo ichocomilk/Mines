@@ -2,20 +2,12 @@ package com.steffy.mines.resources.mines;
 
 public class MineComposition {
 
-    private final String material;
-    private final int percentage;
+    public final int percentage;
+    public final String material;
 
     public MineComposition(String material, int percentage) {
-        this.material = material;
         this.percentage = percentage;
-    }
-
-    public int getPercentage() {
-        return percentage;
-    }
-
-    public String getMaterial() {
-        return material;
+        this.material = material;
     }
 
     @Override

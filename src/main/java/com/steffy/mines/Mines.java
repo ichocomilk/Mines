@@ -6,10 +6,12 @@ import com.steffy.mines.resources.commands.MinesCommand;
 import com.steffy.mines.resources.commands.subcommands.*;
 import com.steffy.mines.resources.listeners.CommandListener;
 import com.steffy.mines.managers.CommandManager;
-import com.steffy.mines.resources.listeners.MineListener;
 import com.steffy.mines.resources.mines.Mine;
 import com.steffy.mines.utilities.general.Message;
 import com.steffy.mines.utilities.storage.YAML;
+
+import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R1.block.CraftBlock;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,13 +42,9 @@ public class Mines extends JavaPlugin {
                 new RemoveCommand(mineManager),
                 new ResetCommand(mineManager)
         );
-
+        getServer().getScheduler().runTaskTimer(this, mineManager, 40, 20);
         registerMessages(new YAML(this, "messages").setup());
-        registerListeners(
-                new CommandListener(commandManager),
-                new MineListener(this)
-        );
-
+        registerListeners(new CommandListener(commandManager));
         commandManager.add(minesCommand);
     }
 

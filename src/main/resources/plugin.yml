@@ -1,8 +1,8 @@
-name: Mines
+name: LCMines
 main: com.steffy.mines.Mines
 version: RELEASE 1.1
-author: StefTheDev
-api-version: 1.13
+authors: [StefTheDev, iChocoMilk]
+api-version: 1.21
 
 commands:
   mines:
